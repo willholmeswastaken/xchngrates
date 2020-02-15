@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Card, StyledBody, StyledAction, StyledThumbnail } from 'baseui/card';
 import { Button } from 'baseui/button';
 
-const RateCard = ({ rate }) => (
+const RateCard = ({ rate, onSelect }) => (
   <Card
     overrides={{ Root: { style: { width: '328px' } } }}
     title={rate.name}
@@ -12,7 +12,7 @@ const RateCard = ({ rate }) => (
       <h3>{rate.val}</h3>
     </StyledBody>
     <StyledAction>
-      <Button overrides={{ BaseButton: { style: { width: '100%' } } }}>
+      <Button overrides={{ BaseButton: { style: { width: '100%' } } }} onClick={onSelect}>
         View More
       </Button>
     </StyledAction>

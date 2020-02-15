@@ -12,5 +12,18 @@ export default {
     } catch (err) {
       throw new Error(err);
     }
+  },
+  getIndividualExchangeRateAgainstBase: async (currency, base) => {
+    try {
+      const res = await fetch(
+        `${EXCHANGE_RATE_API_URL}?base=${base}&symbols=${currency}`
+      );
+      if (res.status === 200) {
+        return (await res.json()).rates;
+      }
+      throw res.statusText;
+    } catch (err) {
+      throw new Error(err);
+    }
   }
 };

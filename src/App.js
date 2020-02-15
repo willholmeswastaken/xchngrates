@@ -4,6 +4,7 @@ import { Provider } from 'react-redux'
 import store from './store';
 import Home from './components/home';
 import Header from './components/header';
+import ViewRate from './components/viewRate';
 
 const App = () => {
   return (
@@ -15,6 +16,7 @@ const App = () => {
         </nav>
 
         <Route path="/" exact component={Home} />
+        <Route path="/currency/:currency" exact component={ViewRate} />
       </div>
     </Router>
     </Provider>
