@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Block } from 'baseui/block';
+import { Breadcrumbs } from 'baseui/breadcrumbs';
+import { StyledLink } from 'baseui/link';
 import {
   LineChart,
   Line,
@@ -24,22 +26,27 @@ const ViewRate = ({
     requestExchangeRate(match.params.currency);
   }, []);
   const isRatePresent = currentRateViewed !== null;
-  const headerContent =
-    isRatePresent
-      ? `${currentRateViewed.rate.name} against GBP: `
-      : 'Loading...';
-  const valContent =
-    isRatePresent ? currentRateViewed.rate.val.toFixed(2) : '';
-  const performantContent =
-    isRatePresent ? currentRateViewed.isPerformant ? (
+  const headerContent = isRatePresent
+    ? `${currentRateViewed.rate.name} against GBP: `
+    : 'Loading...';
+  const valContent = isRatePresent ? currentRateViewed.rate.val.toFixed(2) : '';
+  const performantContent = isRatePresent ? (
+    currentRateViewed.isPerformant ? (
       <p style={{ color: 'green', margin: 0 }}>▲</p>
     ) : (
       <p style={{ color: 'red', margin: 0 }}>▼</p>
-    ) : (
-      ''
-    );
+    )
+  ) : (
+    ''
+  );
   return (
     <div style={{ padding: 50 }}>
+      <Block display='flex' justifyContent='left'>
+        <Breadcrumbs>
+          <StyledLink href='/'>Home</StyledLink>
+          <span>{match.params.currency}</span>
+        </Breadcrumbs>
+      </Block>
       <Block display='flex' justifyContent='center'>
         <h1 style={{ paddingRight: 10 }}>{headerContent}</h1>
         <h1>{valContent}</h1>
