@@ -1,6 +1,8 @@
 
 # XChngRates 📈
 
+Live demo: https://xchngrates.netlify.com/
+
 XChngRates is a react application to be able to view all currencies around the world and, compare their value against a base currency.
 
 Currently the base currency is defaulted to GBP but there is plans to make this selectable by the user in the near future.
