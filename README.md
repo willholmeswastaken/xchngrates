@@ -1,7 +1,7 @@
 
 # XChngRates 📈
 
-Live demo: https://xchngrates.netlify.com/
+**Live demo**: https://xchngrates.netlify.com/
 
 XChngRates is a react application to be able to view all currencies around the world and, compare their value against a base currency.
 
