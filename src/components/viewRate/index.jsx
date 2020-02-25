@@ -23,19 +23,27 @@ const ViewRate = ({
   useEffect(() => {
     requestExchangeRate(match.params.currency);
   }, []);
+  const isRatePresent = currentRateViewed !== null;
   const headerContent =
-    currentRateViewed === null
-      ? 'Loading...'
-      : `${currentRateViewed.rate.name} against GBP: `;
+    isRatePresent
+      ? `${currentRateViewed.rate.name} against GBP: `
+      : 'Loading...';
   const valContent =
-    currentRateViewed === null
-      ? 'Loading...'
-      : currentRateViewed.rate.val.toFixed(2);
+    isRatePresent ? currentRateViewed.rate.val.toFixed(2) : '';
+  const performantContent =
+    isRatePresent ? currentRateViewed.isPerformant ? (
+      <p style={{ color: 'green', margin: 0 }}>▲</p>
+    ) : (
+      <p style={{ color: 'red', margin: 0 }}>▼</p>
+    ) : (
+      ''
+    );
   return (
     <div style={{ padding: 50 }}>
       <Block display='flex' justifyContent='center'>
         <h1 style={{ paddingRight: 10 }}>{headerContent}</h1>
         <h1>{valContent}</h1>
+        <h1>{performantContent}</h1>
       </Block>
       <Block display='flex' justifyContent='center'>
         <p>Last refreshed at {new Date().toDateString()}</p>
@@ -44,7 +52,7 @@ const ViewRate = ({
         {currentRateViewed !== null && (
           <div id='container'>
             <AreaChart
-              width={600}
+              width={800}
               height={400}
               data={currentRateViewed.historicalPerformance}
               margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
@@ -54,9 +62,11 @@ const ViewRate = ({
               <CartesianGrid strokeDasharray='3 3' />
               <Tooltip />
               <ReferenceLine
-                y={currentRateViewed.historicalPerformance.sort(
+                y={
+                  currentRateViewed.historicalPerformance.sort(
                     (a, b) => a - b
-                  )[0].val}
+                  )[0].val
+                }
                 label='Max'
                 stroke='red'
                 strokeDasharray='3 3'

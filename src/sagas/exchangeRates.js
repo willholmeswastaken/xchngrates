@@ -14,7 +14,7 @@ function* getExchangeRates({ base }) {
     const rates = yield call(api.getExchangeRates, base);
     yield put(
       getExchangeRatesSuccess(
-        Object.entries(rates).map(([k, v]) => ({ name: k, val: v }))
+        Object.entries(rates).map(([k, v]) => ({ name: k, val: parseFloat(v).toFixed(2) }))
       )
     );
   } catch (err) {
@@ -43,9 +43,11 @@ function* getIndividualExchangeRateAgainstBase({ currency, base }) {
       rate: Object.entries(rate).map(([k, v]) => ({ name: k, val: v }))[0],
       historicalPerformance: Object.entries(rateHistory).map(([k, v]) =>  {
         const val = v[Object.keys(v)[0]];
-        return { date: k, val}
-      })
+        return { date: k, val: parseFloat(val).toFixed(2)}
+      }).sort((a, b) => new Date(a.date) - new Date(b.date)),
+      isPerformant: null
     };
+    rateViewModel.isPerformant = rateViewModel.rate.val > rateViewModel.historicalPerformance[rateViewModel.historicalPerformance.length - 2].val;
     yield put(
       getIndividualCurrencyExchangeRateAgainstBaseSuccess(
         rateViewModel
