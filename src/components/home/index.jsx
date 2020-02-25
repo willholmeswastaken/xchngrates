@@ -5,14 +5,13 @@ import { Spinner } from 'baseui/spinner';
 import { getExchangeRatesRequest } from '../../actions/exchangeRates';
 import RateCard from '../rateCard';
 
-const Home = ({ rates, isRequesting, requestExchangeRates }) => {
+const Home = ({ rates, isRequesting, requestExchangeRates, history }) => {
   useEffect(() => {
     if (rates.length === 0) {
       requestExchangeRates();
     }
     console.log(rates);
   }, []);
-  console.log(rates);
   return (
     <div style={{ padding: 20 }}>
       <Block display='flex' justifyContent='center'>
@@ -33,7 +32,10 @@ const Home = ({ rates, isRequesting, requestExchangeRates }) => {
         {rates.length > 0 &&
           rates.map(x => (
             <Block key={x.name} display='flex' justifyContent='center'>
-              <RateCard rate={x} />
+              <RateCard
+                rate={x}
+                onSelect={() => history.push(`/currency/${x.name}`)}
+              />
             </Block>
           ))}
       </Block>
@@ -50,7 +52,4 @@ const mapDispatchToProps = dispatch => ({
   requestExchangeRates: () => dispatch(getExchangeRatesRequest('GBP'))
 });
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);
