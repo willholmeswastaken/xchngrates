@@ -22,7 +22,7 @@ const options = {
 const Header = () => (
   <HeaderNavigation>
     <NavigationList $align={ALIGN.left}>
-      <NavigationItem>xchngrat.es</NavigationItem>
+      <NavigationItem><Link href='/'>XchngRates</Link></NavigationItem>
     </NavigationList>
     <NavigationList $align={ALIGN.center} />
     <NavigationList $align={ALIGN.right}>

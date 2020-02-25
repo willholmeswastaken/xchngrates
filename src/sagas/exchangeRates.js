@@ -24,14 +24,31 @@ function* getExchangeRates({ base }) {
 
 function* getIndividualExchangeRateAgainstBase({ currency, base }) {
   try {
-    const rates = yield call(
+    const today = new Date();
+    const historicalComparisonDate = new Date(today);
+    historicalComparisonDate.setDate(historicalComparisonDate.getDate() - 7);
+    const rate = yield call(
       api.getIndividualExchangeRateAgainstBase,
       currency,
       base
     );
+    const rateHistory = yield call(
+      api.getIndividualExchangeRateAgainstBaseHistory,
+      currency,
+      base,
+      historicalComparisonDate,
+      today
+    );
+    const rateViewModel = {
+      rate: Object.entries(rate).map(([k, v]) => ({ name: k, val: v }))[0],
+      historicalPerformance: Object.entries(rateHistory).map(([k, v]) =>  {
+        const val = v[Object.keys(v)[0]];
+        return { date: k, val}
+      })
+    };
     yield put(
       getIndividualCurrencyExchangeRateAgainstBaseSuccess(
-        Object.entries(rates).map(([k, v]) => ({ name: k, val: v }))[0]
+        rateViewModel
       )
     );
   } catch (err) {

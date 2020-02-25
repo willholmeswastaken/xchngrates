@@ -6,6 +6,8 @@ import Home from './components/home';
 import Header from './components/header';
 import ViewRate from './components/viewRate';
 
+import './App.css';
+
 const App = () => {
   return (
     <Provider store={store()}>

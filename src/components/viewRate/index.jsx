@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Block } from 'baseui/block';
-import { LineChart, Line, XAxis, Tooltip, CartesianGrid, } from 'recharts';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  Tooltip,
+  CartesianGrid,
+  ReferenceLine,
+  Area,
+  YAxis,
+  AreaChart
+} from 'recharts';
 import { getIndividualCurrencyExchangeRateAgainstBase } from '../../actions/exchangeRates';
-
-const data = [
-  { name: 'Page A', uv: 300, pv: 2600, amt: 3400 },
-  { name: 'Page B', uv: 400, pv: 4367, amt: 6400 },
-  { name: 'Page C', uv: 300, pv: 1398, amt: 2400 },
-  { name: 'Page D', uv: 200, pv: 9800, amt: 2400 },
-  { name: 'Page E', uv: 278, pv: 3908, amt: 2400 },
-  { name: 'Page F', uv: 189, pv: 4800, amt: 2400 },
-  { name: 'Page G', uv: 189, pv: 4800, amt: 2400 },
-];
 
 const ViewRate = ({
   currentRateViewed,
@@ -26,11 +26,11 @@ const ViewRate = ({
   const headerContent =
     currentRateViewed === null
       ? 'Loading...'
-      : `${currentRateViewed.name} against GBP: `;
+      : `${currentRateViewed.rate.name} against GBP: `;
   const valContent =
     currentRateViewed === null
       ? 'Loading...'
-      : currentRateViewed.val.toFixed(2);
+      : currentRateViewed.rate.val.toFixed(2);
   return (
     <div style={{ padding: 50 }}>
       <Block display='flex' justifyContent='center'>
@@ -41,18 +41,35 @@ const ViewRate = ({
         <p>Last refreshed at {new Date().toDateString()}</p>
       </Block>
       <Block display='flex' justifyContent='center'>
-        <LineChart
-          width={400}
-          height={400}
-          data={data}
-          margin={{ top: 5, right: 20, left: 10, bottom: 5 }}
-        >
-          <XAxis dataKey='name' />
-          <Tooltip />
-          <CartesianGrid stroke='#f5f5f5' />
-          <Line type='monotone' dataKey='uv' stroke='#ff7300' yAxisId={0} />
-          <Line type='monotone' dataKey='pv' stroke='#387908' yAxisId={1} />
-        </LineChart>
+        {currentRateViewed !== null && (
+          <div id='container'>
+            <AreaChart
+              width={600}
+              height={400}
+              data={currentRateViewed.historicalPerformance}
+              margin={{ top: 20, right: 30, left: 0, bottom: 0 }}
+            >
+              <XAxis dataKey='date' />
+              <YAxis />
+              <CartesianGrid strokeDasharray='3 3' />
+              <Tooltip />
+              <ReferenceLine
+                y={currentRateViewed.historicalPerformance.sort(
+                    (a, b) => a - b
+                  )[0].val}
+                label='Max'
+                stroke='red'
+                strokeDasharray='3 3'
+              />
+              <Area
+                type='monotone'
+                dataKey='val'
+                stroke='#8884d8'
+                fill='#8884d8'
+              />
+            </AreaChart>
+          </div>
+        )}
       </Block>
     </div>
   );
